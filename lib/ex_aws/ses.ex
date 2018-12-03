@@ -49,13 +49,13 @@ defmodule ExAws.SES do
   @doc "Fetch the sending limits for the associated AWS account"
   @spec get_send_quota() :: ExAws.Operation.Query.t()
   def get_send_quota do
-    request(:get_send_quota, [])
+    request(:get_send_quota, %{})
   end
 
   @doc "Fetch the sending statistics for the associated AWS account"
   @spec get_send_statistics() :: ExAws.Operation.Query.t()
   def get_send_statistics do
-    request(:get_send_statistics, [])
+    request(:get_send_statistics, %{})
   end
 
   ## Emails
