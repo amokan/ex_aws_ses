@@ -42,13 +42,11 @@ if Code.ensure_loaded?(SweetXml) do
 
     def parse({:ok, %{body: xml}=resp}, :get_send_quota) do
       parsed_body = xml
-      |> SweetXml.xpath(~x"//GetSendQuotaResult",
-                        configuration_sets: [
-                          ~x"./ListConfigurationSetsResult",
-                            members: ~x"./ConfigurationSets/member/Name/text()"ls,
-                            next_token: ~x"./NextToken/text()"so,
-                          ],
-                          request_id: request_id_xpath()
+      |> SweetXml.xpath(~x"//GetSendQuotaResponse",
+                        max_24_hour_send: ~x"./GetSendQuotaResult/Max24HourSend/text()"s,
+                        sent_last_24_hours: ~x"./GetSendQuotaResult/SentLast24Hours/text()"s,
+                        max_send_rate: ~x"./GetSendQuotaResult/MaxSendRate/text()"s,
+                        request_id: request_id_xpath()
       )
 
       {:ok, Map.put(resp, :body, parsed_body)}
