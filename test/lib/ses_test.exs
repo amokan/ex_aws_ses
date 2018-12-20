@@ -11,10 +11,10 @@ defmodule ExAws.SESTest do
     assert expected == SES.verify_email_identity(ctx.email).params
   end
 
-  test "#verify_email_identity request" do
-    resp = SES.verify_email_identity("success@simulator.amazonses.com") |> ExAws.request
-    assert {:ok, %{body: %{request_id: _}}} = resp
-  end
+  # test "#verify_email_identity request" do
+  #   resp = SES.verify_email_identity("success@simulator.amazonses.com") |> ExAws.request
+  #   assert {:ok, %{body: %{request_id: _}}} = resp
+  # end
 
   test "#identity_verification_attributes", ctx do
     expected = %{
@@ -106,7 +106,7 @@ defmodule ExAws.SESTest do
         cc:  ["success@simulator.amazonses.com"],
         to:  ["success@simulator.amazonses.com", "bounce@simulator.amazonses.com"]
       }
-      
+
       src = "user@example.com"
       template_data = %{data1: "data1", data2: "data2"} |> Poison.encode!()
 

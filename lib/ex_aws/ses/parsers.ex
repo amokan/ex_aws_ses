@@ -42,10 +42,10 @@ if Code.ensure_loaded?(SweetXml) do
 
     def parse({:ok, %{body: xml}=resp}, :get_send_quota) do
       parsed_body = xml
-      |> SweetXml.xpath(~x"//GetSendQuotaResult",
-                        max_24_hour_send: ~x"./Max24HourSend/text()"s,
-                        sent_last_24_hours: ~x"./SentLast24Hours/text()"s,
-                        max_send_rate: ~x"./MaxSendRate/text()"s,
+      |> SweetXml.xpath(~x"//GetSendQuotaResponse",
+                        max_24_hour_send: ~x"./GetSendQuotaResult/Max24HourSend/text()"f,
+                        sent_last_24_hours: ~x"./GetSendQuotaResult/SentLast24Hours/text()"f,
+                        max_send_rate: ~x"./GetSendQuotaResult/MaxSendRate/text()"f,
                         request_id: request_id_xpath()
       )
 
@@ -54,13 +54,16 @@ if Code.ensure_loaded?(SweetXml) do
 
     def parse({:ok, %{body: xml}=resp}, :get_send_statistics) do
       parsed_body = xml
-      |> SweetXml.xpath(~x"//ListConfigurationSetsResponse",
-                        configuration_sets: [
-                          ~x"./ListConfigurationSetsResult",
-                            members: ~x"./ConfigurationSets/member/Name/text()"ls,
-                            next_token: ~x"./NextToken/text()"so,
-                          ],
-                          request_id: request_id_xpath()
+      |> SweetXml.xpath(~x"//GetSendStatisticsResponse",
+                        send_statistics: [
+                          ~x"./GetSendStatisticsResult/SendDataPoints/member"l,
+                          complaints: ~x"./Complaints/text()"i,
+                          delivery_attempts: ~x"./DeliveryAttempts/text()"i,
+                          rejects: ~x"./Rejects/text()"i,
+                          bounces: ~x"./Bounces/text()"i,
+                          timestamp: ~x"./Timestamp/text()"
+                        ],
+                        request_id: request_id_xpath()
       )
 
       {:ok, Map.put(resp, :body, parsed_body)}

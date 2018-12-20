@@ -27,6 +27,80 @@ defmodule ExAws.SES.ParserTest do
     assert parsed_doc == %{request_id: "d8eb8250-be9b-11e6-b7f7-d570946af758"}
   end
 
+  test "#parse a get_send_quota response" do
+    rsp = """
+      <GetSendQuotaResponse xmlns=\"http://ses.amazonaws.com/doc/2010-12-01/\">
+        <GetSendQuotaResult>
+          <Max24HourSend>200.0</Max24HourSend>
+          <SentLast24Hours>0.0</SentLast24Hours>
+          <MaxSendRate>1.0</MaxSendRate>
+        </GetSendQuotaResult>
+        <ResponseMetadata>
+          <RequestId>12c706f8-0487-11e9-9129-897ed4cc1009</RequestId>
+        </ResponseMetadata>
+      </GetSendQuotaResponse>
+    """
+    |> to_success
+
+
+    {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :get_send_quota)
+    assert parsed_doc == %{ max_24_hour_send: 200.0, max_send_rate: 1.0, sent_last_24_hours: 0.0, request_id: "12c706f8-0487-11e9-9129-897ed4cc1009" }
+  end
+
+  test "#parse a get_send_statistics response" do
+    rsp = """
+    <GetSendStatisticsResponse xmlns=\"http://ses.amazonaws.com/doc/2010-12-01/\">
+      <GetSendStatisticsResult>
+        <SendDataPoints>
+          <member>
+            <Complaints>0</Complaints>
+            <Rejects>0</Rejects>
+            <Bounces>0</Bounces>
+            <DeliveryAttempts>2</DeliveryAttempts>
+            <Timestamp>2018-12-18T17:55:00Z</Timestamp>
+          </member>
+          <member>
+            <Complaints>0</Complaints>
+            <Rejects>0</Rejects>
+            <Bounces>0</Bounces>
+            <DeliveryAttempts>5</DeliveryAttempts>
+            <Timestamp>2018-12-18T18:10:00Z</Timestamp>
+          </member>
+          <member>
+            <Complaints>0</Complaints>
+            <Rejects>0</Rejects>
+            <Bounces>0</Bounces>
+            <DeliveryAttempts>2</DeliveryAttempts>
+            <Timestamp>2018-12-16T18:55:00Z</Timestamp>
+          </member>
+          <member>
+            <Complaints>0</Complaints>
+            <Rejects>0</Rejects>
+            <Bounces>0</Bounces>
+            <DeliveryAttempts>2</DeliveryAttempts>
+            <Timestamp>2018-12-16T19:10:00Z</Timestamp>
+          </member>
+          <member>
+            <Complaints>0</Complaints>
+            <Rejects>0</Rejects>
+            <Bounces>0</Bounces>
+            <DeliveryAttempts>4</DeliveryAttempts>
+            <Timestamp>2018-12-17T20:10:00Z</Timestamp>
+          </member>
+        </SendDataPoints>
+      </GetSendStatisticsResult>
+      <ResponseMetadata>
+        <RequestId>e7ccb0d6-048a-11e9-bc84-65c13fca9f09</RequestId>
+      </ResponseMetadata>
+    </GetSendStatisticsResponse>
+    """
+    |> to_success
+
+    {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :get_send_statistics)
+    assert parsed_doc == %{request_id: "e7ccb0d6-048a-11e9-bc84-65c13fca9f09", send_statistics: [%{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: '2018-12-18T17:55:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 5, rejects: 0, timestamp: '2018-12-18T18:10:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: '2018-12-16T18:55:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: '2018-12-16T19:10:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 4, rejects: 0, timestamp: '2018-12-17T20:10:00Z'}]}
+  end
+
+
   test "#parse identity_verification_attributes" do
     rsp = """
       <GetIdentityVerificationAttributesResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
