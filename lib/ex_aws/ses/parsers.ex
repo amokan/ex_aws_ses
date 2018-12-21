@@ -40,6 +40,16 @@ if Code.ensure_loaded?(SweetXml) do
       {:ok, Map.put(resp, :body, parsed_body)}
     end
 
+    def parse({:ok, %{body: xml}=resp}, :list_identities) do
+      parsed_body = xml
+      |> SweetXml.xpath(~x"//ListIdentitiesResponse",
+                        identities: ~x"./ListIdentitiesResult/Identities/member/text()"ls,
+                        request_id: request_id_xpath()
+      )
+
+      {:ok, Map.put(resp, :body, parsed_body)}
+    end
+
     def parse({:ok, %{body: xml}=resp}, :get_send_quota) do
       parsed_body = xml
       |> SweetXml.xpath(~x"//GetSendQuotaResponse",

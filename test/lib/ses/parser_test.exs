@@ -143,6 +143,27 @@ defmodule ExAws.SES.ParserTest do
     assert parsed_doc[:verification_attributes] == verification_attributes
   end
 
+  test "#parse identity_list" do
+    rsp = """
+    <ListIdentitiesResponse xmlns=\"http://ses.amazonaws.com/doc/2010-12-01/\">
+      <ListIdentitiesResult>
+        <Identities>
+          <member>foo.com</member>
+          <member>foo.bar</member>
+          <member>testdomain.co</member>
+        </Identities>
+      </ListIdentitiesResult>
+      <ResponseMetadata>
+        <RequestId>2350f2e7-0554-11e9-adc3-ffbd87899b73</RequestId>
+      </ResponseMetadata>
+    </ListIdentitiesResponse>
+    """
+    |> to_success
+
+    {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :list_identities)
+    assert parsed_doc == %{request_id: "2350f2e7-0554-11e9-adc3-ffbd87899b73", identities: ["foo.com", "foo.bar", "testdomain.co"]}
+  end
+
   test "#parse configuration_sets" do
     rsp = """
       <ListConfigurationSetsResponse xmlns=\"http://ses.amazonaws.com/doc/2010-12-01/\">
