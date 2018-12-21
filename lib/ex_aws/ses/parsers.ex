@@ -61,7 +61,7 @@ if Code.ensure_loaded?(SweetXml) do
                           delivery_attempts: ~x"./DeliveryAttempts/text()"i,
                           rejects: ~x"./Rejects/text()"i,
                           bounces: ~x"./Bounces/text()"i,
-                          timestamp: ~x"./Timestamp/text()"
+                          timestamp: ~x"./Timestamp/text()"s
                         ],
                         request_id: request_id_xpath()
       )

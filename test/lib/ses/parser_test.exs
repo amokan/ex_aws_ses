@@ -97,7 +97,7 @@ defmodule ExAws.SES.ParserTest do
     |> to_success
 
     {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :get_send_statistics)
-    assert parsed_doc == %{request_id: "e7ccb0d6-048a-11e9-bc84-65c13fca9f09", send_statistics: [%{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: '2018-12-18T17:55:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 5, rejects: 0, timestamp: '2018-12-18T18:10:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: '2018-12-16T18:55:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: '2018-12-16T19:10:00Z'}, %{bounces: 0, complaints: 0, delivery_attempts: 4, rejects: 0, timestamp: '2018-12-17T20:10:00Z'}]}
+    assert parsed_doc == %{request_id: "e7ccb0d6-048a-11e9-bc84-65c13fca9f09", send_statistics: [%{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: "2018-12-18T17:55:00Z"}, %{bounces: 0, complaints: 0, delivery_attempts: 5, rejects: 0, timestamp: "2018-12-18T18:10:00Z"}, %{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: "2018-12-16T18:55:00Z"}, %{bounces: 0, complaints: 0, delivery_attempts: 2, rejects: 0, timestamp: "2018-12-16T19:10:00Z"}, %{bounces: 0, complaints: 0, delivery_attempts: 4, rejects: 0, timestamp: "2018-12-17T20:10:00Z"}]}
   end
 
 

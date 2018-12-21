@@ -15,6 +15,12 @@ defmodule ExAws.SES do
     request(:verify_email_identity, %{"EmailAddress" => email})
   end
 
+  @doc "Verifies an email address via a custom template"
+  @spec send_custom_verification_email(email :: binary, template :: binary) :: ExAws.Operation.Query.t()
+  def send_custom_verification_email(email, template) do
+    request(:send_custom_verification_email, %{"EmailAddress" => email, "TemplateName" => template})
+  end
+
   @type list_identities_opt ::
           {:max_items, pos_integer}
           | {:next_token, String.t()}
