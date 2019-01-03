@@ -27,6 +27,24 @@ defmodule ExAws.SES.ParserTest do
     assert parsed_doc == %{request_id: "d8eb8250-be9b-11e6-b7f7-d570946af758"}
   end
 
+  test "#parse a send_custom_verification_email response" do
+    rsp = """
+      <SendCustomVerificationEmailResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
+        <SendCustomVerificationEmailResult>
+          <MessageId>010001681486e5f3-24418085-d125-4c6f-bf1f-1c0daa9af0b4-000000</MessageId>
+        </SendCustomVerificationEmailResult>
+        <ResponseMetadata>
+          <RequestId>e8f66c3c-0f73-11e9-b765-93ed7dbcb8f2</RequestId>
+        </ResponseMetadata>
+      </SendCustomVerificationEmailResponse>
+    """
+    |> to_success
+
+
+    {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :send_custom_verification_email)
+    assert parsed_doc == %{ message_id: "010001681486e5f3-24418085-d125-4c6f-bf1f-1c0daa9af0b4-000000", request_id: "e8f66c3c-0f73-11e9-b765-93ed7dbcb8f2" }
+  end
+
   test "#parse a get_send_quota response" do
     rsp = """
       <GetSendQuotaResponse xmlns=\"http://ses.amazonaws.com/doc/2010-12-01/\">

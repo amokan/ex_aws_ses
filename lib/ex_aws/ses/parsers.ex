@@ -10,6 +10,16 @@ if Code.ensure_loaded?(SweetXml) do
       {:ok, Map.put(resp, :body, parsed_body)}
     end
 
+    def parse({:ok, %{body: xml}=resp}, :send_custom_verification_email) do
+      parsed_body = xml
+      |> SweetXml.xpath(~x"//SendCustomVerificationEmailResponse",
+                        message_id: ~x"./SendCustomVerificationEmailResult/MessageId/text()"s,
+                        request_id: request_id_xpath()
+      )
+
+      {:ok, Map.put(resp, :body, parsed_body)}
+    end
+
     def parse({:ok, %{body: xml}=resp}, :get_identity_verification_attributes) do
       parsed_body = xml
       |> SweetXml.xpath(~x"//GetIdentityVerificationAttributesResponse",
